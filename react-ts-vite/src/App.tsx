@@ -1,31 +1,22 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
+import { BrowserRouter as Router, useRoutes } from 'react-router-dom';
+import { ErrorBoundary } from 'react-error-boundary'
+import routes from './configs/router/routes.config';
+import ErrorFallback from './common/page/Error'
+import AppContext from './AppContext';
+
+const GlobalRoutes = () => useRoutes(routes())
 
 function App() {
-  const [count, setCount] = useState(0)
 
   return (
-    <div className="App">
-      <div>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the React logo to learn more
-      </p>
-    </div>
+    <AppContext.Provider value={{ routes }}>
+      <Router>
+        <ErrorBoundary FallbackComponent={ErrorFallback}>
+          <GlobalRoutes />
+        </ErrorBoundary>
+      </Router>
+    </AppContext.Provider>
   )
 }
 

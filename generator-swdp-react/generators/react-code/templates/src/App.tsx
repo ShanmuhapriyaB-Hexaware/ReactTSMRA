@@ -1,15 +1,22 @@
 import './App.css'
-import { useRoutes } from 'react-router-dom'
+import { BrowserRouter as Router, useRoutes } from 'react-router-dom';
 import { ErrorBoundary } from 'react-error-boundary'
-import { AllPages } from './configs/routes.config'
-import ErrorFallback from './common/page'
+import routes from './configs/router/routes.config';
+import ErrorFallback from './common/page/Error'
+import AppContext from './AppContext';
+
+const GlobalRoutes = () => useRoutes(routes())
 
 function App() {
-  const all_pages = useRoutes(AllPages())
+
   return (
-      <ErrorBoundary FallbackComponent={ErrorFallback}>
-        {all_pages}
-      </ErrorBoundary>
+    <AppContext.Provider value={{ routes }}>
+      <Router>
+        <ErrorBoundary FallbackComponent={ErrorFallback}>
+          <GlobalRoutes />
+        </ErrorBoundary>
+      </Router>
+    </AppContext.Provider>
   )
 }
 
