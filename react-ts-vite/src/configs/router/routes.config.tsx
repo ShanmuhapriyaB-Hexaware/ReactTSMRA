@@ -1,9 +1,9 @@
 import { Navigate, RouteObject } from "react-router-dom"
+import NotAuthenticated from "../../common/pages/NotAuthenticated"
+import NotFound from "../../common/pages/NotFound"
+import RedirectHere from "../../common/pages/RedirectHere"
+import UnAuthorized from "../../common/pages/UnAuthorized"
 import homeRoutes from "../../main/home/home.routes"
-import  RedirectHere  from "../../common/components/RedirectHere"
-import NotAuthenticated from "../../common/components/NotAuthenticated"
-import UnAuthorized from "../../common/components/UnAuthorized"
-import NotFound from "../../common/components/NotFound"
 
 const routes = () => {
     const all_routes: RouteObject[] = [
