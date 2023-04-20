@@ -1,0 +1,22 @@
+{
+    "compilerOptions": {
+      "module": "commonjs",
+      "target": "ES2022",
+      "lib": ["ES2022"],
+      "moduleResolution": "node",
+      "noImplicitAny": true,
+      "strictNullChecks": true,
+      "sourceMap": true,
+      "skipLibCheck": true,
+      "outDir": "generators",
+      "rootDir": "src",
+    },
+    "include": [
+      "src"
+    ],
+    "exclude": [
+      "node_modules",
+      "generators"
+    ]
+  }
+  

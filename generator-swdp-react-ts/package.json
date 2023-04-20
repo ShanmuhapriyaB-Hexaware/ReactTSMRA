@@ -1,0 +1,23 @@
+{
+  "name": "generator-swdp-react-ts",
+  "version": "1.0.0",
+  "description": "React TS Yeoman Generator",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "test": "jest",
+    "lint": "eslint ./src --ext .ts",
+    "lint:build": "eslint ./generators --ext .js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "yeoman-generator": "^5.8.0"
+  },
+  "devDependencies": {
+    "@types/yeoman-generator": "^5.2.11",
+    "eslint": "^8.37.0",
+    "typescript": "^5.0.3"
+  }
+}
