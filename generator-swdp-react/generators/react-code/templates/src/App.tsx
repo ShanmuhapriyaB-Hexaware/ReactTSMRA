@@ -2,7 +2,7 @@ import './App.css'
 import { BrowserRouter as Router, useRoutes } from 'react-router-dom';
 import { ErrorBoundary } from 'react-error-boundary'
 import routes from './configs/router/routes.config';
-import ErrorFallback from './common/page/Error'
+import ErrorFallback from './common/pages/Error'
 import AppContext from './AppContext';
 
 const GlobalRoutes = () => useRoutes(routes())
