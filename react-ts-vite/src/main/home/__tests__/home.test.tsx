@@ -1,9 +1,21 @@
+import '@testing-library/jest-dom'
 import { render, screen } from "@testing-library/react";
 import Home from "../pages/Home";
 
 describe("Home", () => {
-  it("should work as expected", () => {
+  it("should be defined", () => {
     render(<Home />);
-    expect(screen.getByText("Edit src/main/home/pages/Home.tsx and save to test HMR")).toBeInTheDocument();
   });
 });
+
+describe("Last Text Is Rendered", () => {
+  beforeEach(() => {
+    render(<Home />)
+  })
+  
+  it("should render the text", () => {
+    expect(screen.getByText("Click on the React logo to learn more")).toBeInTheDocument();
+  });
+});
+
+

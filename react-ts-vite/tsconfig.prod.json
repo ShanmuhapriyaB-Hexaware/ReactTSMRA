@@ -2,6 +2,8 @@
     "extends": "./tsconfig",
     "exclude": [
       "./src/__tests__/**",
+      "./src/main/home/__tests__/**",
+      "./src/common/pages/__tests__/**",
       "./src/__mocks__/**",
       "./src/test-utils"
     ]
