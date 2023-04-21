@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const Generator = require("yeoman-generator");
 class ReactBase extends Generator {
     _mraInput;
-    rootFiles = ['public', 'src', '.gitignore', 'index.html', 'tsconfig.json', 'tsconfig.node.json', 'vite.config.ts'];
+    rootFiles = ['public', 'src', '.gitignore', 'index.html', 'tsconfig.json', 'tsconfig.node.json', 'tsconfig.prod.json', 'svgTransform.cjs', 'vite.config.ts'];
     editableFiles = ['package.json'];
     constructor(args, opts) {
         super(args, opts);

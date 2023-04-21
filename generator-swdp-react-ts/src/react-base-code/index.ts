@@ -5,7 +5,7 @@ class ReactBase extends Generator {
 
     _mraInput: FoundationInput;
 
-    rootFiles = ['public', 'src', '.gitignore', 'index.html', 'tsconfig.json', 'tsconfig.node.json', 'vite.config.ts']
+    rootFiles = ['public', 'src', '.gitignore', 'index.html', 'tsconfig.json', 'tsconfig.node.json', 'tsconfig.prod.json', 'svgTransform.cjs', 'vite.config.ts']
     editableFiles = ['package.json']
 
     constructor(args: string | string[], opts: Generator.GeneratorOptions) {
