@@ -18,6 +18,7 @@ class ReactBase extends Generator {
 
     writing() {
         this._copyRootFiles();
+        this._updatePackageJson();  
     }
 
     _copyTpl(templatePath: string, destinationPath: string, options?: any) {
@@ -44,6 +45,14 @@ class ReactBase extends Generator {
             
         });
 
+    }
+
+    _updatePackageJson() {
+        const filePath : string = "package.json"
+        let packagesData : any = this.fs.readJSON(this.templatePath(filePath))
+        packagesData["dependencies"]["@reduxjs/toolkit"] = "^1.9.1"
+        packagesData["dependencies"]["react-redux"] = "^8.0.5"
+        this.fs.writeJSON(this.destinationPath(filePath), packagesData)
     }
 }
 
