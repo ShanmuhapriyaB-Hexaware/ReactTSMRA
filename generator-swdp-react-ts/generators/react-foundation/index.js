@@ -7,12 +7,12 @@ class ReactFoundation extends Generator {
     Variations = [
         {
             category: "store",
-            choice: ["react-store-redux"],
+            choices: ["react-store-redux"],
             multiple: false
         },
         {
             category: "http",
-            choice: ["react-http-axios"],
+            choices: ["react-http-axios"],
             multiple: false
         }
     ];
@@ -21,7 +21,7 @@ class ReactFoundation extends Generator {
     }
     initializing() {
         this._mraInput = this.options.data;
-        this._variationsChosen = this._mraInput.variationsChosen;
+        this._variationsChosen = this._mraInput.variations;
     }
     writing() {
         this._generateReactMRA();
@@ -29,11 +29,28 @@ class ReactFoundation extends Generator {
     _generateReactMRA() {
         const baseCodeTemplateInput = { data: this._mraInput };
         this.composeWith(require.resolve('../react-base-code'), baseCodeTemplateInput);
-        // this.Variations.forEach(variation => {
-        //     if (variation.category === "store" && this.Variations.includes(variation.choice[0])) {
-        //         this.composeWith(variation.choice)
-        //     }
-        // });
+        this._variationsChosen.forEach(variation => {
+            const variationDetails = this.Variations.find(v => v.category === variation.category);
+            if (!variationDetails)
+                return;
+            const templateInput = {
+                data: {
+                    component_name: this._mraInput.component_name,
+                    choices: variation.choices
+                }
+            };
+            let currentChoices = [];
+            if (variationDetails.multiple)
+                currentChoices = variation.choices;
+            else
+                currentChoices = [variation.choices[0]];
+            this._callSubGeneratorsOfVariations(currentChoices, templateInput);
+        });
+    }
+    _callSubGeneratorsOfVariations(choices, templateInput) {
+        choices.forEach(choice => {
+            this.composeWith(require.resolve(`../${choice}`), templateInput);
+        });
     }
 }
 exports.default = ReactFoundation;

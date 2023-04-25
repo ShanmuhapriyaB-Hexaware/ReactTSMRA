@@ -2,12 +2,11 @@ export interface FoundationInput {
     component_name: string;
     description: string;
     author: string;
-    variationsChosen: Variations[];
+    variations: Variations[];
 }
 
 export interface Variations {
     category: string;
-    selectedChoice?: string;
-    choice : string[];
+    choices : string[];
     multiple?: boolean;
 }
