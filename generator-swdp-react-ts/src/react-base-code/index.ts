@@ -1,9 +1,9 @@
 import * as Generator from 'yeoman-generator';
-import { FoundationInput } from './types';
+import { MRAInput } from './types';
 
 class ReactBase extends Generator {
 
-    _mraInput: FoundationInput;
+    _mraInput: MRAInput;
 
     rootFiles = ['public', 'src', '.gitignore', 'index.html', 'tsconfig.json', 'tsconfig.node.json', 'tsconfig.prod.json', 'svgTransform.cjs', 'vite.config.ts']
     editableFiles = ['package.json']
@@ -18,7 +18,6 @@ class ReactBase extends Generator {
 
     writing() {
         this._copyRootFiles();
-        this._updatePackageJson();  
     }
 
     _copyTpl(templatePath: string, destinationPath: string, options?: any) {
@@ -45,14 +44,6 @@ class ReactBase extends Generator {
             
         });
 
-    }
-
-    _updatePackageJson() {
-        const filePath : string = "package.json"
-        let packagesData : any = this.fs.readJSON(this.destinationPath(filePath))
-        packagesData["dependencies"]["@reduxjs/toolkit"] = "^1.9.1"
-        packagesData["dependencies"]["react-redux"] = "^8.0.5"
-        this.fs.writeJSON(this.destinationPath(filePath), packagesData)
     }
 }
 

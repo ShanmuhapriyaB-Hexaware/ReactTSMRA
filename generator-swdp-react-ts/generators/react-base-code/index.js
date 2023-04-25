@@ -13,7 +13,6 @@ class ReactBase extends Generator {
     }
     writing() {
         this._copyRootFiles();
-        this._updatePackageJson();
     }
     _copyTpl(templatePath, destinationPath, options) {
         this.fs.copyTpl(this.templatePath(templatePath), this.destinationPath(destinationPath), options ?? {});
@@ -30,13 +29,6 @@ class ReactBase extends Generator {
                 this._copyTpl(file, destinationPath);
             }
         });
-    }
-    _updatePackageJson() {
-        const filePath = "package.json";
-        let packagesData = this.fs.readJSON(this.destinationPath(filePath));
-        packagesData["dependencies"]["@reduxjs/toolkit"] = "^1.9.1";
-        packagesData["dependencies"]["react-redux"] = "^8.0.5";
-        this.fs.writeJSON(this.destinationPath(filePath), packagesData);
     }
 }
 exports.default = ReactBase;

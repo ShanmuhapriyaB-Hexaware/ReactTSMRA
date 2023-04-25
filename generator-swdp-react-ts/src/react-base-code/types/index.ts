@@ -1,6 +1,5 @@
-export interface FoundationInput {
+export interface MRAInput {
     component_name: string;
     description: string;
     author: string;
-    variations: any;
 }
