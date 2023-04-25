@@ -1,8 +1,16 @@
 import { useState } from 'react'
 import reactLogo from "../../../assets/react.svg"
+import { axiosHttpRequest } from '../../../libs/axios';
 
 function Home() {
-    const [count, setCount] = useState(0)
+    const [count, setCount] = useState(0);
+
+    const axios = new axiosHttpRequest();
+    axios.axiosHttpRequest
+    .get('https://jsonplaceholder.typicode.com/todos/1')
+    .then(res => {
+        console.log(res.data)
+    })
 
     return (
         <div className="App">
