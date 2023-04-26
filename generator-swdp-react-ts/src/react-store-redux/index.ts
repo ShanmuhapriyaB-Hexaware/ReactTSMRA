@@ -54,14 +54,14 @@ class ReactStoreRedux extends Generator {
         const appTsxSourceFile = this.tsProject.createSourceFile(this.destinationPath("./src/App.tsx"), appTsxFilePath, {overwrite: true});
         const importDeclarations : ImportDeclarationStructure[] = [
             {
-                namedImports: ['{Provider as ReduxProvider}'],
+                namedImports: ['Provider as ReduxProvider'],
                 moduleSpecifier: "react-redux",
-                kind: StructureKind.ImportDeclaration,
+                kind: StructureKind.ImportDeclaration
             },
             {
-                namedImports: ['store'],
+                defaultImport: 'store',
                 moduleSpecifier: "./store",
-                kind: StructureKind.ImportDeclaration,
+                kind: StructureKind.ImportDeclaration
             }
         ]
         appTsxSourceFile.addImportDeclarations(importDeclarations)
