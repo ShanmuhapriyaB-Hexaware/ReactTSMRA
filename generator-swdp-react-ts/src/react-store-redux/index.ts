@@ -1,9 +1,13 @@
 import * as Generator from 'yeoman-generator';
+import { Project, ImportDeclarationStructure, StructureKind } from "ts-morph";
 
 class ReactStoreRedux extends Generator {
 
+    tsProject: Project;
+
     constructor(args: string | string[], opts: Generator.GeneratorOptions) {
         super(args, opts);
+        this.tsProject = new Project()
     }
 
     rootStoreFiles = ['store']
@@ -12,6 +16,7 @@ class ReactStoreRedux extends Generator {
     writing() {
         this._copyStoreFiles();
         this._updatePackageJson();
+        this._updateAppTsx();
     }
 
     _copyTpl(templatePath: string, destinationPath: string, options?: any) {
@@ -42,6 +47,25 @@ class ReactStoreRedux extends Generator {
         packagesData["dependencies"]["@reduxjs/toolkit"] = "^1.9.1"
         packagesData["dependencies"]["react-redux"] = "^8.0.5"
         this.fs.writeJSON(this.destinationPath(filePath), packagesData)
+    }
+
+    _updateAppTsx() {
+        const appTsxFilePath = this.fs.read(this.destinationPath('./src/App.tsx'));
+        const appTsxSourceFile = this.tsProject.createSourceFile(this.destinationPath("./src/App.tsx"), appTsxFilePath);
+        const importDeclarations : ImportDeclarationStructure[] = [
+            {
+                namedImports: ['{Provider as ReduxProvider}'],
+                moduleSpecifier: "react-redux",
+                kind: StructureKind.ImportDeclaration,
+            },
+            {
+                namedImports: ['store'],
+                moduleSpecifier: "./store",
+                kind: StructureKind.ImportDeclaration,
+            }
+        ]
+        appTsxSourceFile.addImportDeclarations(importDeclarations)
+        this.fs.write(this.destinationPath('./src/App.tsx'), appTsxSourceFile.getText())
     }
 }
 
