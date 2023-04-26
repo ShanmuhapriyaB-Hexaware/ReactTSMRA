@@ -38,7 +38,7 @@ class ReactStoreRedux extends Generator {
     }
     _updateAppTsx() {
         const appTsxFilePath = this.fs.read(this.destinationPath('./src/App.tsx'));
-        const appTsxSourceFile = this.tsProject.createSourceFile(this.destinationPath("./src/App.tsx"), appTsxFilePath);
+        const appTsxSourceFile = this.tsProject.createSourceFile(this.destinationPath("./src/App.tsx"), appTsxFilePath, { overwrite: true });
         const importDeclarations = [
             {
                 namedImports: ['{Provider as ReduxProvider}'],
