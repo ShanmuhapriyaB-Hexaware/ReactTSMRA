@@ -18,7 +18,7 @@ class ReactFoundation extends Generator {
         },
         {
             category: "component-library",
-            choices:["react-local-library"],
+            choices:["react-mui-local-library"],
             multiple: false
         }
     ];

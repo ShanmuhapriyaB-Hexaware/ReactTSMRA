@@ -30,7 +30,7 @@ class ComponentLibrary extends Generator{
         const filePath = this.destinationPath('package.json');
         const packages = this.fs.readJSON(filePath) as any;
         const deps = {
-            "mui-component-library": "file:local-component-library/mui-components/react-rapidx-mui-component-library-0.6.4.tgz"
+            "mui-component-library": "file:local-component-library/react-rapidx-mui-component-library-0.6.4.tgz"
         }
         packages.dependencies = {...packages.dependencies, ...deps}
         console.log(packages.dependencies)
