@@ -15,6 +15,11 @@ class ReactFoundation extends Generator {
             category: "http",
             choices: ["react-http-axios"],
             multiple: false
+        },
+        {
+            category: "components",
+            choices: ["react-mui-components"],
+            multiple: false
         }
     ];
 
