@@ -1,5 +1,8 @@
 import * as Generator from 'yeoman-generator';
 import { Project, ImportDeclarationStructure, StructureKind } from "ts-morph";
+import parse from 'node-html-parser';
+
+const JSX_STRING = /\(\s*(<.*)>\s*\)/gs
 
 class ReactStoreRedux extends Generator {
 
@@ -38,7 +41,7 @@ class ReactStoreRedux extends Generator {
             const destinationPath = `./src/main/${file}/store`
             this._copyTpl(templatePath, destinationPath);
         });
- 
+
     }
 
     _updatePackageJson() {
@@ -51,8 +54,8 @@ class ReactStoreRedux extends Generator {
 
     _updateAppTsx() {
         const appTsxFilePath = this.fs.read(this.destinationPath('./src/App.tsx'));
-        const appTsxSourceFile = this.tsProject.createSourceFile(this.destinationPath("./src/App.tsx"), appTsxFilePath, {overwrite: true});
-        const importDeclarations : ImportDeclarationStructure[] = [
+        const appTsxSourceFile = this.tsProject.createSourceFile(this.destinationPath("./src/App.tsx"), appTsxFilePath, { overwrite: true });
+        const importDeclarations: ImportDeclarationStructure[] = [
             {
                 namedImports: ['Provider as ReduxProvider'],
                 moduleSpecifier: "react-redux",
@@ -65,7 +68,22 @@ class ReactStoreRedux extends Generator {
             }
         ]
         appTsxSourceFile.addImportDeclarations(importDeclarations)
+
+        const htmlBody = this._parseJSXFile(appTsxFilePath)
+        appTsxSourceFile.getFunction('App')?.setBodyText(`return ${htmlBody}`)
         this.fs.write(this.destinationPath('./src/App.tsx'), appTsxSourceFile.getText())
+    }
+
+    _parseJSXFile(appTsxFilePath: any) {
+        let matches = JSX_STRING.exec(appTsxFilePath)
+        if (matches) {
+            let HTML = matches[1] + ">"
+            const root = parse(HTML)
+            let htmlRootBody = parse(`(<ReduxProvider store={store}>${root.toString()}</ReduxProvider>)`)
+            // console.log("parsed HTML Body", htmlRootBody.toString())
+            return htmlRootBody.toString();
+        }
+
     }
 }
 
