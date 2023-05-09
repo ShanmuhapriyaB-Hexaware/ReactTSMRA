@@ -79,7 +79,7 @@ class ReactStoreRedux extends Generator {
         if (matches) {
             let HTML = matches[1] + ">"
             const root = parse(HTML)
-            let htmlRootBody = parse(`(<ReduxProvider store={store}>${root.toString()}</ReduxProvider>)`)
+            let htmlRootBody = parse('(<ReduxProvider store={store}>' + '\n' + root.toString() + '\n' + '</ReduxProvider>)')
             // console.log("parsed HTML Body", htmlRootBody.toString())
             return htmlRootBody.toString();
         }

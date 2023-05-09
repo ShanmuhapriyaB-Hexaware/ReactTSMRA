@@ -10,60 +10,48 @@ class ReactStoreRedux extends Generator {
         super(args, opts);
         this.tsProject = new ts_morph_1.Project();
     }
-    rootStoreFiles = ['store'];
-    componentStoreFiles = ['home'];
+    authFilesFiles = ['loginComponents'];
     writing() {
         this._copyStoreFiles();
         this._updatePackageJson();
-        // this._updateAppTsx();
+        this._updateAppTsx();
     }
     _copyTpl(templatePath, destinationPath, options) {
         this.fs.copyTpl(this.templatePath(templatePath), this.destinationPath(destinationPath), options ?? {});
     }
     _copyStoreFiles() {
-        this.rootStoreFiles.forEach(file => {
-            const destinationPath = `./src/${file}`;
+        this.authFilesFiles.forEach(file => {
+            const destinationPath = `./src/configs/auth`;
             this._copyTpl(file, destinationPath);
-        });
-        this.componentStoreFiles.forEach(file => {
-            const templatePath = `${file}Store`;
-            const destinationPath = `./src/main/${file}/store`;
-            this._copyTpl(templatePath, destinationPath);
         });
     }
     _updatePackageJson() {
         const filePath = "package.json";
         let packagesData = this.fs.readJSON(this.destinationPath(filePath));
-        packagesData["dependencies"]["@reduxjs/toolkit"] = "^1.9.1";
-        packagesData["dependencies"]["react-redux"] = "^8.0.5";
+        packagesData["dependencies"]["@axa-fr/react-oidc"] = "^6.9.2";
         this.fs.writeJSON(this.destinationPath(filePath), packagesData);
     }
-    // _updateAppTsx() {
-    //     const appTsxFilePath = this.fs.read(this.destinationPath('./src/App.tsx'));
-    //     const appTsxSourceFile = this.tsProject.createSourceFile(this.destinationPath("./src/App.tsx"), appTsxFilePath, { overwrite: true });
-    //     const importDeclarations: ImportDeclarationStructure[] = [
-    //         {
-    //             namedImports: ['Provider as ReduxProvider'],
-    //             moduleSpecifier: "react-redux",
-    //             kind: StructureKind.ImportDeclaration
-    //         },
-    //         {
-    //             defaultImport: 'store',
-    //             moduleSpecifier: "./store",
-    //             kind: StructureKind.ImportDeclaration
-    //         }
-    //     ]
-    //     appTsxSourceFile.addImportDeclarations(importDeclarations)
-    //     const htmlBody = this._parseJSXFile(appTsxFilePath)
-    //     appTsxSourceFile.getFunction('App')?.setBodyText(`return ${htmlBody}`)
-    //     this.fs.write(this.destinationPath('./src/App.tsx'), appTsxSourceFile.getText())
-    // }
+    _updateAppTsx() {
+        const appTsxFilePath = this.fs.read(this.destinationPath('./src/App.tsx'));
+        const appTsxSourceFile = this.tsProject.createSourceFile(this.destinationPath("./src/App.tsx"), appTsxFilePath, { overwrite: true });
+        const importDeclarations = [
+            {
+                namedImports: ['configurationIdentityServer'],
+                moduleSpecifier: "./configs/auth/Configurations",
+                kind: ts_morph_1.StructureKind.ImportDeclaration
+            }
+        ];
+        appTsxSourceFile.addImportDeclarations(importDeclarations);
+        const htmlBody = this._parseJSXFile(appTsxFilePath);
+        appTsxSourceFile.getFunction('App')?.setBodyText(`return ${htmlBody}`);
+        this.fs.write(this.destinationPath('./src/App.tsx'), appTsxSourceFile.getText());
+    }
     _parseJSXFile(appTsxFilePath) {
         let matches = JSX_STRING.exec(appTsxFilePath);
         if (matches) {
             let HTML = matches[1] + ">";
             const root = (0, node_html_parser_1.default)(HTML);
-            let htmlRootBody = (0, node_html_parser_1.default)(`(<ReduxProvider store={store}>${root.toString()}</ReduxProvider>)`);
+            let htmlRootBody = (0, node_html_parser_1.default)(`(<OidcProvider configuration={configurationIdentityServer}>${root.toString()}</OidcProvider>)`);
             // console.log("parsed HTML Body", htmlRootBody.toString())
             return htmlRootBody.toString();
         }
