@@ -59,15 +59,12 @@ class ReactStoreRedux extends Generator {
         this.fs.write(this.destinationPath('./src/App.tsx'), appTsxSourceFile.getText());
     }
     _parseJSXFile(appTsxFilePath) {
-        console.log(appTsxFilePath);
         let matches = JSX_STRING.exec(appTsxFilePath);
         if (matches) {
             let HTML = matches[1] + ">";
-            console.log("parsed html");
-            console.log(HTML);
             const root = (0, node_html_parser_1.default)(HTML);
             let htmlRootBody = (0, node_html_parser_1.default)(`(<ReduxProvider store={store}>${root.toString()}</ReduxProvider>)`);
-            console.log("parsed HTML Body", htmlRootBody.toString());
+            // console.log("parsed HTML Body", htmlRootBody.toString())
             return htmlRootBody.toString();
         }
     }

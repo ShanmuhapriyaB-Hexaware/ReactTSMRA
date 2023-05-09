@@ -5,20 +5,21 @@ class ReactFoundation extends Generator {
 
     _mraInput: FoundationInput;
     _variationsChosen: Variations[];
+    _subGenPrefix : string = "react-foundation";
     Variations: Variations[] = [
         {
             category: "store",
-            choices: ["react-store-redux"],
+            choices: ["redux"],
             multiple: false
         },
         {
             category: "http",
-            choices: ["react-http-axios"],
+            choices: ["http-framework"],
             multiple: false
         },
         {
             category: "components",
-            choices: ["react-mui-components"],
+            choices: ["mui"],
             multiple: false
         }
     ];
@@ -38,7 +39,7 @@ class ReactFoundation extends Generator {
 
     _generateReactMRA() {
         const baseCodeTemplateInput = { data: this._mraInput }
-        this.composeWith(require.resolve('../react-base-code'), baseCodeTemplateInput);
+        this.composeWith(require.resolve(`../${this._subGenPrefix}-code`), baseCodeTemplateInput);
 
         this._variationsChosen.forEach(variation => {
 
@@ -66,7 +67,7 @@ class ReactFoundation extends Generator {
 
     _callSubGeneratorsOfVariations(choices: string[], templateInput: any) {
         choices.forEach(choice => {
-            this.composeWith(require.resolve(`../${choice}`), templateInput);
+            this.composeWith(require.resolve(`../${this._subGenPrefix}-${choice}`), templateInput);
         })
     }
 }
