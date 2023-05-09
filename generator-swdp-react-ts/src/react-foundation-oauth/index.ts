@@ -65,7 +65,7 @@ class ReactStoreRedux extends Generator {
         if (matches) {
             let HTML = matches[1] + ">"
             const root = parse(HTML)
-            let htmlRootBody = parse(`(<OidcProvider configuration={configurationIdentityServer}>${root.toString()}</OidcProvider>)`)
+            let htmlRootBody = parse('(<OidcProvider configuration={configurationIdentityServer}>' + '\n' + root.toString() + '\n' + '</OidcProvider>)')
             // console.log("parsed HTML Body", htmlRootBody.toString())
             return htmlRootBody.toString();
         }
