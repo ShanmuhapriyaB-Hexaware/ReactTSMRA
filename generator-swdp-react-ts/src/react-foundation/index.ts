@@ -8,6 +8,11 @@ class ReactFoundation extends Generator {
     _subGenPrefix : string = "react-foundation";
     Variations: Variations[] = [
         {
+            category: "auth",
+            choices: ["oauth"],
+            multiple: false
+        },
+        {
             category: "store",
             choices: ["redux"],
             multiple: false

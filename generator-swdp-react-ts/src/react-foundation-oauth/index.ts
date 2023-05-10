@@ -1,5 +1,5 @@
 import * as Generator from 'yeoman-generator';
-import { Project, ImportDeclarationStructure, StructureKind } from "ts-morph";
+import { Project, ImportDeclarationStructure, StructureKind, ObjectLiteralExpression, SyntaxKind, ArrowFunction, ArrayLiteralExpression } from "ts-morph";
 import parse from 'node-html-parser';
 
 const JSX_STRING = /\(\s*(<.*)>\s*\)/gs
@@ -19,6 +19,7 @@ class ReactStoreRedux extends Generator {
         this._copyStoreFiles();
         this._updatePackageJson();
         this._updateAppTsx();
+        this._updateRoutes();
     }
 
     _copyTpl(templatePath: string, destinationPath: string, options?: any) {
@@ -66,10 +67,35 @@ class ReactStoreRedux extends Generator {
             let HTML = matches[1] + ">"
             const root = parse(HTML)
             let htmlRootBody = parse('(<OidcProvider configuration={configurationIdentityServer}>' + '\n' + root.toString() + '\n' + '</OidcProvider>)')
-            // console.log("parsed HTML Body", htmlRootBody.toString())
             return htmlRootBody.toString();
         }
 
+    }
+
+    _updateRoutes() {
+        const routesTsxFilePath = this.fs.read(this.destinationPath('./src/configs/router/routes.config.tsx'));
+        const routesTsxSourceFile = this.tsProject.createSourceFile(this.destinationPath("./src/configs/router/routes.config.tsx"), routesTsxFilePath, { overwrite: true });
+        const importDeclarations: ImportDeclarationStructure[] = [
+            {
+                defaultImport: 'MultiAuthProvider',
+                moduleSpecifier: "../auth/MultiAuthProvider",
+                kind: StructureKind.ImportDeclaration
+            }
+        ]
+        routesTsxSourceFile.addImportDeclarations(importDeclarations)
+
+        // console.log("routes function",routesTsxFilePath)
+        const routesFunction = routesTsxSourceFile.getVariableDeclaration('routes')
+        const routesArrowFunction = routesFunction?.getDescendantsOfKind(SyntaxKind.ArrowFunction)
+
+        if (!routesArrowFunction) return;
+
+        const routes = routesArrowFunction[0].getDescendantsOfKind(SyntaxKind.Block)[0].getVariableDeclaration('all_routes')?.getFirstChildByKindOrThrow(SyntaxKind.ArrayLiteralExpression)
+        
+        if (!routes) return;
+
+        routes?.addElement(`{ path: "/login", element: <MultiAuthProvider /> },`)
+        this.fs.write(this.destinationPath('./src/configs/router/routes.config.tsx'), routesTsxSourceFile.getText())
     }
 }
 

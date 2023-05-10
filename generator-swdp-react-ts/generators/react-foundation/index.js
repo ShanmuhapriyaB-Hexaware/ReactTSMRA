@@ -7,6 +7,11 @@ class ReactFoundation extends Generator {
     _subGenPrefix = "react-foundation";
     Variations = [
         {
+            category: "auth",
+            choices: ["oauth"],
+            multiple: false
+        },
+        {
             category: "store",
             choices: ["redux"],
             multiple: false

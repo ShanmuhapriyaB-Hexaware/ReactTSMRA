@@ -15,6 +15,7 @@ class ReactStoreRedux extends Generator {
         this._copyStoreFiles();
         this._updatePackageJson();
         this._updateAppTsx();
+        this._updateRoutes();
     }
     _copyTpl(templatePath, destinationPath, options) {
         this.fs.copyTpl(this.templatePath(templatePath), this.destinationPath(destinationPath), options ?? {});
@@ -51,10 +52,31 @@ class ReactStoreRedux extends Generator {
         if (matches) {
             let HTML = matches[1] + ">";
             const root = (0, node_html_parser_1.default)(HTML);
-            let htmlRootBody = (0, node_html_parser_1.default)(`(<OidcProvider configuration={configurationIdentityServer}>${root.toString()}</OidcProvider>)`);
-            // console.log("parsed HTML Body", htmlRootBody.toString())
+            let htmlRootBody = (0, node_html_parser_1.default)('(<OidcProvider configuration={configurationIdentityServer}>' + '\n' + root.toString() + '\n' + '</OidcProvider>)');
             return htmlRootBody.toString();
         }
+    }
+    _updateRoutes() {
+        const routesTsxFilePath = this.fs.read(this.destinationPath('./src/configs/router/routes.config.tsx'));
+        const routesTsxSourceFile = this.tsProject.createSourceFile(this.destinationPath("./src/configs/router/routes.config.tsx"), routesTsxFilePath, { overwrite: true });
+        const importDeclarations = [
+            {
+                defaultImport: 'MultiAuthProvider',
+                moduleSpecifier: "../auth/MultiAuthProvider",
+                kind: ts_morph_1.StructureKind.ImportDeclaration
+            }
+        ];
+        routesTsxSourceFile.addImportDeclarations(importDeclarations);
+        // console.log("routes function",routesTsxFilePath)
+        const routesFunction = routesTsxSourceFile.getVariableDeclaration('routes');
+        const routesArrowFunction = routesFunction?.getDescendantsOfKind(ts_morph_1.SyntaxKind.ArrowFunction);
+        if (!routesArrowFunction)
+            return;
+        const routes = routesArrowFunction[0].getDescendantsOfKind(ts_morph_1.SyntaxKind.Block)[0].getVariableDeclaration('all_routes')?.getFirstChildByKindOrThrow(ts_morph_1.SyntaxKind.ArrayLiteralExpression);
+        if (!routes)
+            return;
+        routes?.addElement(`{ path: "/login", element: <MultiAuthProvider /> },`);
+        this.fs.write(this.destinationPath('./src/configs/router/routes.config.tsx'), routesTsxSourceFile.getText());
     }
 }
 exports.default = ReactStoreRedux;
