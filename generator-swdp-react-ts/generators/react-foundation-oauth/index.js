@@ -29,7 +29,7 @@ class ReactStoreRedux extends Generator {
     _updatePackageJson() {
         const filePath = "package.json";
         let packagesData = this.fs.readJSON(this.destinationPath(filePath));
-        packagesData["dependencies"]["@axa-fr/react-oidc"] = "^6.9.2";
+        packagesData["dependencies"]["@axa-fr/react-oidc"] = "6.9.2";
         this.fs.writeJSON(this.destinationPath(filePath), packagesData);
     }
     _updateAppTsx() {
@@ -39,6 +39,11 @@ class ReactStoreRedux extends Generator {
             {
                 namedImports: ['configurationIdentityServer'],
                 moduleSpecifier: "./configs/auth/Configurations",
+                kind: ts_morph_1.StructureKind.ImportDeclaration
+            },
+            {
+                namedImports: ['OidcProvider'],
+                moduleSpecifier: "@axa-fr/react-oidc",
                 kind: ts_morph_1.StructureKind.ImportDeclaration
             }
         ];
