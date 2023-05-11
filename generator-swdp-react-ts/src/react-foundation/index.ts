@@ -24,7 +24,7 @@ class ReactFoundation extends Generator {
         },
         {
             category: "components",
-            choices: ["mui"],
+            choices: ["mui-framework"],
             multiple: false
         }
     ];

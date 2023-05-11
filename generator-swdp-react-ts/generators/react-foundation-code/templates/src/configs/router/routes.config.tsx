@@ -7,7 +7,6 @@ import homeRoutes from "../../main/home/home.routes"
 
 const routes = () => {
     const all_routes: RouteObject[] = [
-        ...homeRoutes,
         { path: '/redirect-here', element: <RedirectHere /> },
         { path: '/401', element: <NotAuthenticated /> },
         { path: '/403', element: <UnAuthorized /> },
