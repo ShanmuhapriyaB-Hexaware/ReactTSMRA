@@ -18,6 +18,7 @@ class MUIFramework extends Generator {
     writing() {
         this._copyMUIFiles();
         this._updateRoutesConfig();
+        this._updateRootReducer();
     }
 
     _copyTpl(templatePath: string, destinationPath: string, options?: any) {
@@ -32,7 +33,7 @@ class MUIFramework extends Generator {
         const allMUIFiles = [...this.muiFiles]
 
         allMUIFiles.forEach(file => {
-            const destinationPath = ``
+            const destinationPath = `./src/common/${file}`
             this._copyTpl(file, destinationPath);
         });
     }
@@ -51,19 +52,14 @@ class MUIFramework extends Generator {
         routesSourceFile.addImportDeclarations(importDeclarations)
 
         const routesFunction = routesSourceFile.getVariableDeclaration('routes');
-        // const routesArray = routesFunction?.getVariableDeclaration('all_routes');
         const routesArrayFunction = routesFunction?.getDescendantsOfKind(SyntaxKind.ArrowFunction);
 
-        // console.log("ArrowFunction", routesArrayFunction);
         if (!routesArrayFunction) return;
         const routesObject = routesArrayFunction[0]?.getDescendantsOfKind(SyntaxKind.Block)[0].getVariableDeclaration('all_routes');
-        // console.log("routesObject", routesObject);
 
         const routesArrayObject = routesObject?.getFirstChildByKindOrThrow(SyntaxKind.ArrayLiteralExpression);
         if (!routesArrayObject) return;
-        // const existingArrayElements = routesArrayObject.getElements().map((expression) => expression.getText());
 
-        // routesArrayObject.addElements([]);
         routesArrayObject.addElements([
             `
             {
@@ -71,31 +67,41 @@ class MUIFramework extends Generator {
                 children: [...homeRoutes]
             },
             `,
-            // ...existingArrayElements
         ]
         );
 
-
-
-
-        // routesArray?.addPropertyAssignment(
-        //     {
-        //         kind: StructureKind.PropertyAssignment,
-        //         initializer: `element: <Layout />,`,
-        //         name:  `children: [...homeRoutes]`
-        //     }
-        // );
-        // const routesObject = <ObjectLiteralExpression>routesArray?.getInitializer();
-
-        // routesArray?.insertPropertyAssignment(0,
-        //     {
-        //         kind: StructureKind.PropertyAssignment,
-        //         initializer: '<Layout />',
-        //         name: 'element'
-
-        //     })
-        //     console.log(routesArray);
         this.fs.write(this.destinationPath('./src/configs/router/routes.config.tsx'), routesSourceFile.getText())
+    }
+
+    _updateRootReducer() {
+        const rootReducerFilePath = this.fs.read(this.destinationPath('./src/store/root-reducer.ts'));
+        const rootReducerSourceFile = this.tsProject.createSourceFile(this.destinationPath('./src/store/root-reducer.ts'), rootReducerFilePath, { overwrite: true });
+        const importDeclarations: ImportDeclarationStructure[] = [
+            {
+                namedImports: ['themeSlice'],
+                moduleSpecifier: "../common/components/layout/store",
+                kind: StructureKind.ImportDeclaration
+            },
+            {
+                namedImports: ['layoutSlice'],
+                moduleSpecifier: "../common/components/layout/store",
+                kind: StructureKind.ImportDeclaration
+            }
+        ]
+        rootReducerSourceFile.addImportDeclarations(importDeclarations);
+
+        const rootReducerFunction = rootReducerSourceFile.getVariableDeclaration('rootReducer');
+        const rootReducerObject = rootReducerFunction?.getFirstChildByKindOrThrow(SyntaxKind.ObjectLiteralExpression);
+        if(!rootReducerObject) return;
+
+        rootReducerObject.insertShorthandPropertyAssignment(0,
+            {
+                kind: StructureKind.ShorthandPropertyAssignment,
+                name: 'themeSlice'
+            })
+        console.log("rootReducer", rootReducerFunction);
+
+        this.fs.write(this.destinationPath('./src/store/root-reducer.ts'), rootReducerSourceFile.getText())
     }
 
 }
