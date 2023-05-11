@@ -17,6 +17,7 @@ class MUIFramework extends Generator {
 
     writing() {
         this._copyMUIFiles();
+        this._updatePackageJson();
         this._updateRoutesConfig();
         this._updateRootReducer();
     }
@@ -38,12 +39,23 @@ class MUIFramework extends Generator {
         });
     }
 
+    _updatePackageJson() {
+        const filePath: string = "package.json"
+        let packagesData: any = this.fs.readJSON(this.destinationPath(filePath))
+        packagesData["dependencies"]["@mui/icons-material"] = "^5.11.16"
+        packagesData["dependencies"]["@mui/material"] = "^5.12.3"
+        packagesData["dependencies"]["@mui/lab"] = "^5.0.0-alpha.128"
+        packagesData["dependencies"]["@emotion/react"] = "^11.10.6"
+        packagesData["dependencies"]["@emotion/styled"] = "^11.10.6"
+        this.fs.writeJSON(this.destinationPath(filePath), packagesData)
+    }
+
     _updateRoutesConfig() {
         const routesConfigFilePath = this.fs.read(this.destinationPath('./src/configs/router/routes.config.tsx'));
         const routesSourceFile = this.tsProject.createSourceFile(this.destinationPath('./src/configs/router/routes.config.tsx'), routesConfigFilePath, { overwrite: true });
         const importDeclarations: ImportDeclarationStructure[] = [
             {
-                namedImports: ['Layout'],
+                defaultImport: 'Layout',
                 moduleSpecifier: "../../common/components/layout/layout",
                 kind: StructureKind.ImportDeclaration
             }
@@ -78,28 +90,38 @@ class MUIFramework extends Generator {
         const rootReducerSourceFile = this.tsProject.createSourceFile(this.destinationPath('./src/store/root-reducer.ts'), rootReducerFilePath, { overwrite: true });
         const importDeclarations: ImportDeclarationStructure[] = [
             {
-                namedImports: ['themeSlice'],
+                defaultImport: 'themeSlice',
                 moduleSpecifier: "../common/components/layout/store",
                 kind: StructureKind.ImportDeclaration
             },
             {
-                namedImports: ['layoutSlice'],
+                defaultImport: 'layoutSlice',
                 moduleSpecifier: "../common/components/layout/store",
                 kind: StructureKind.ImportDeclaration
             }
         ]
         rootReducerSourceFile.addImportDeclarations(importDeclarations);
 
-        const rootReducerFunction = rootReducerSourceFile.getVariableDeclaration('rootReducer');
-        const rootReducerObject = rootReducerFunction?.getFirstChildByKindOrThrow(SyntaxKind.ObjectLiteralExpression);
-        if(!rootReducerObject) return;
+        const rootReducerFunction = rootReducerSourceFile.getVariableDeclaration('rootReducer')?.getDescendantsOfKind(SyntaxKind.CallExpression);
+        if (!rootReducerFunction) return;
 
-        rootReducerObject.insertShorthandPropertyAssignment(0,
-            {
-                kind: StructureKind.ShorthandPropertyAssignment,
-                name: 'themeSlice'
-            })
-        console.log("rootReducer", rootReducerFunction);
+        const rootReducerObject = rootReducerFunction[0]?.getFirstChildByKindOrThrow(SyntaxKind.ObjectLiteralExpression);
+        if (!rootReducerObject) return;
+
+        console.log("rootReducer", rootReducerObject);
+
+        rootReducerObject.insertShorthandPropertyAssignments(0,
+            [
+                {
+                    kind: StructureKind.ShorthandPropertyAssignment,
+                    name: 'themeSlice'
+                },
+                {
+                    kind: StructureKind.ShorthandPropertyAssignment,
+                    name: 'layoutSlice'
+                }
+            ]
+        )
 
         this.fs.write(this.destinationPath('./src/store/root-reducer.ts'), rootReducerSourceFile.getText())
     }
