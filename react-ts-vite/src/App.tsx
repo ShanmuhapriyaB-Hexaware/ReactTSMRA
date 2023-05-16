@@ -15,7 +15,7 @@ function App() {
 
   return (
     <ReduxProvider store={store}>
-      <OidcProvider configuration={configurationIdentityServer} >
+      {/* <OidcProvider configuration={configurationIdentityServer} > */}
         <AppContext.Provider value={{ routes }}>
           <Router>
             <ErrorBoundary FallbackComponent={ErrorFallback}>
@@ -23,7 +23,7 @@ function App() {
             </ErrorBoundary>
           </Router>
         </AppContext.Provider>
-      </OidcProvider>
+      {/* </OidcProvider> */}
     </ReduxProvider>
   )
 }
