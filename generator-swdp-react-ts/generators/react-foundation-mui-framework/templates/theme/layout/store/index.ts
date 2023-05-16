@@ -1,10 +1,8 @@
 import { combineReducers } from '@reduxjs/toolkit';
-import dialog from './slice/dialogSlice';
-import theme from './slice/themeSlice';
+import layoutReducer from './slice/layout.slice';
 
 const reducer = combineReducers({
-  dialog,
-  theme
+  layout: layoutReducer,
 });
 
 export default reducer;

@@ -13,7 +13,8 @@ class MUIFramework extends Generator {
         this.tsProject = new Project()
     }
 
-    muiFiles = ['components']
+    muiFiles = ['components', 'store']
+    layoutFiles =['theme']
 
     writing() {
         this._copyMUIFiles();
@@ -32,11 +33,16 @@ class MUIFramework extends Generator {
 
     _copyMUIFiles() {
         const allMUIFiles = [...this.muiFiles]
+        const allLayoutFiles = [...this.layoutFiles]
 
         allMUIFiles.forEach(file => {
             const destinationPath = `./src/common/${file}`
             this._copyTpl(file, destinationPath);
         });
+
+        allLayoutFiles.forEach(file => {
+            const destinationPath = `./src/${file}`
+        })
     }
 
     _updatePackageJson() {
@@ -56,7 +62,7 @@ class MUIFramework extends Generator {
         const importDeclarations: ImportDeclarationStructure[] = [
             {
                 defaultImport: 'Layout',
-                moduleSpecifier: "../../common/components/layout/layout",
+                moduleSpecifier: "../../theme/layout/pages/Layout",
                 kind: StructureKind.ImportDeclaration
             }
         ]

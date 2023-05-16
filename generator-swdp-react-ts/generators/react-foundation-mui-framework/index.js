@@ -9,7 +9,8 @@ class MUIFramework extends Generator {
         super(args, opts);
         this.tsProject = new ts_morph_1.Project();
     }
-    muiFiles = ['components'];
+    muiFiles = ['components', 'store'];
+    layoutFiles = ['theme'];
     writing() {
         this._copyMUIFiles();
         this._updatePackageJson();
@@ -21,9 +22,13 @@ class MUIFramework extends Generator {
     }
     _copyMUIFiles() {
         const allMUIFiles = [...this.muiFiles];
+        const allLayoutFiles = [...this.layoutFiles];
         allMUIFiles.forEach(file => {
             const destinationPath = `./src/common/${file}`;
             this._copyTpl(file, destinationPath);
+        });
+        allLayoutFiles.forEach(file => {
+            const destinationPath = `./src/${file}`;
         });
     }
     _updatePackageJson() {
@@ -42,7 +47,7 @@ class MUIFramework extends Generator {
         const importDeclarations = [
             {
                 defaultImport: 'Layout',
-                moduleSpecifier: "../../common/components/layout/layout",
+                moduleSpecifier: "../../theme/layout/pages/Layout",
                 kind: ts_morph_1.StructureKind.ImportDeclaration
             }
         ];
