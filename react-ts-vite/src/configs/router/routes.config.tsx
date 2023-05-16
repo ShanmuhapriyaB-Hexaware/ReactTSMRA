@@ -4,11 +4,12 @@ import NotFound from "../../common/pages/NotFound"
 import RedirectHere from "../../common/pages/RedirectHere"
 import UnAuthorized from "../../common/pages/UnAuthorized"
 import homeRoutes from "../../main/home/home.routes"
+import WebLayout from "../../theme/layout/pages/Layout"
 import MultiAuthProvider from "../auth/MultiAuthProvider"
 
 const routes = () => {
     const all_routes: RouteObject[] = [
-        ...homeRoutes,
+        { element: <WebLayout />, children: [...homeRoutes] },
         { path: '/redirect-here', element: <RedirectHere /> },
         { path: '/401', element: <NotAuthenticated /> },
         { path: '/403', element: <UnAuthorized /> },

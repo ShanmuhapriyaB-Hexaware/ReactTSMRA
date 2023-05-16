@@ -8,6 +8,7 @@ import AppContext from './AppContext';
 import store from './store';
 import { OidcProvider } from '@axa-fr/react-oidc';
 import { configurationIdentityServer } from './configs/auth/Configurations';
+import AppAuthenticator from './configs/auth/AppAuthenticator';
 
 const GlobalRoutes = () => useRoutes(routes())
 
@@ -15,16 +16,18 @@ function App() {
 
   return (
     <ReduxProvider store={store}>
-      <OidcProvider configuration={configurationIdentityServer} >
-        <AppContext.Provider value={{ routes }}>
-          <Router>
-            <ErrorBoundary FallbackComponent={ErrorFallback}>
-              <GlobalRoutes />
-            </ErrorBoundary>
-          </Router>
-        </AppContext.Provider>
-      </OidcProvider>
-    </ReduxProvider>
+      <AppContext.Provider value={{ routes }}>
+        <Router>
+          <OidcProvider configuration={configurationIdentityServer} >
+            <AppAuthenticator>
+              <ErrorBoundary FallbackComponent={ErrorFallback}>
+                <GlobalRoutes />
+              </ErrorBoundary>
+            </AppAuthenticator>
+          </OidcProvider>
+        </Router>
+      </AppContext.Provider>
+    </ReduxProvider >
   )
 }
 

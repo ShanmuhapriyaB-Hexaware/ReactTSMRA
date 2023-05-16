@@ -7,17 +7,16 @@ import Authenticating from './override/Authenticating';
 import Loading from './override/Loading';
 import ServiceWorkerNotSupported from './override/ServiceWorkerNotSupported';
 import SessionLost from './override/SessionLost';
-import Home from '../../main/home/pages/Home';
 import { useDispatch } from '../../store';
-import { setUser } from './store/auth.slice';
+import { setConfigName } from './store/auth.slice';
 import { CallBackSuccess } from './override/Callback';
 
 const MultiAuth = ({ configurationName, handleConfigurationChange, fname }: any) => {
+
     const { login, logout, isAuthenticated } = useOidc(configurationName);
 
     return (
         <>
-
             {!isAuthenticated &&
                 <div className="Auth-form-container">
                     <form className="Auth-form" >
@@ -62,6 +61,8 @@ if (!sessionStorage.configurationName) {
 }
 
 const MultiAuthProvider = () => {
+    const dispatch = useDispatch();
+
     const [isSessionLost, setIsSessionLost] = useState<boolean>(false);
     const [fname, setFname] = useState<string>('');
     const [domain, setDomain] = useState<string>('');
