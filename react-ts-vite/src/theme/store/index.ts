@@ -1,8 +1,8 @@
 import { combineReducers } from '@reduxjs/toolkit';
-import layoutReducer from './slice/layout.slice';
+import themeReducer from './slice/theme.slice';
 
 const reducer = combineReducers({
-  layout: layoutReducer,
+  theme: themeReducer,
 });
 
 export default reducer;

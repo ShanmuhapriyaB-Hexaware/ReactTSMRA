@@ -4,7 +4,7 @@ import NotFound from "../../common/pages/NotFound"
 import RedirectHere from "../../common/pages/RedirectHere"
 import UnAuthorized from "../../common/pages/UnAuthorized"
 import homeRoutes from "../../main/home/home.routes"
-import Layout from "../../theme/layout/pages/Layout"
+import Layout from "../../theme/pages/Layout"
 import MultiAuthProvider from "../auth/MultiAuthProvider"
 
 const routes = () => {

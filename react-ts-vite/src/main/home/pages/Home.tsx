@@ -1,9 +1,14 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import reactLogo from "../../../assets/react.svg"
+import { setNavigation } from '../../../common/store/slices/navigation.slice';
+import { getHomeNavigation } from '../../../configs/navigation/navigation.config';
 import { axiosHttpRequest } from '../../../libs/axios';
+import { useDispatch } from '../../../store';
 
 function Home() {
     const [count, setCount] = useState(0);
+
+    const dispatch = useDispatch();
 
     const axios = new axiosHttpRequest();
     axios.axiosHttpRequest
@@ -11,6 +16,10 @@ function Home() {
     .then(res => {
         console.log(res.data)
     })
+
+    useEffect(() => {
+        dispatch(setNavigation(getHomeNavigation()))
+    }, [])
 
     return (
         <div className="App">

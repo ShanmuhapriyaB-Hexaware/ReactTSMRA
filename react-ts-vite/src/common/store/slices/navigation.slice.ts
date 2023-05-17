@@ -1,24 +1,20 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { NavigationItem } from '../../../../models/navigation.types';
+import { NavigationItem } from '../../../models/navigation.types';
 
 type ColorModes = 'dark' | 'light';
 
 type InitialStateType = {
     navItems: NavigationItem[];
     activeItem: string;
-    mode: ColorModes;
-    data: any
 };
 
 const initialState : InitialStateType = {
     navItems: [] as NavigationItem[],
     activeItem: '',
-    mode: 'dark',
-    data: [],
 };
 
-const layoutSlice = createSlice({
-    name: 'layoutSlice',
+const themeSlice = createSlice({
+    name: 'themeSlice',
     initialState,
     reducers: {
         setNavigation: (state, action: PayloadAction<NavigationItem[]>) => {
@@ -34,18 +30,11 @@ const layoutSlice = createSlice({
             state.navItems.unshift(action.payload);
         },
         removeNavigationItem: (state, action: PayloadAction<string>) => {
-            state.navItems = state.navItems.filter((item) => item.key !== action.payload);
+            state.navItems = state.navItems.filter((item) => item.id !== action.payload);
         },
         setActiveNavItem: (state, action: PayloadAction<string>) => {
             state.activeItem = action.payload;
-        },
-        toggleColorMode: (state) => {
-            if (state.mode === 'light') state.mode = 'dark';
-            else state.mode = 'light';
-        },
-        setColorTheme: (state, action: PayloadAction<ColorModes>) => {
-            state.mode = action.payload;
-        },
+        }
     },
     extraReducers: (builder) => { },
 });
@@ -56,6 +45,6 @@ export const {
     appendNavigationItem,
     prependNavigationItem,
     removeNavigationItem,
-} = layoutSlice.actions;
+} = themeSlice.actions;
 
-export default layoutSlice.reducer;
+export default themeSlice.reducer;
