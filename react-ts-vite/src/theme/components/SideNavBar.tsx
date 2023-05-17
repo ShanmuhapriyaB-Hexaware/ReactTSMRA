@@ -16,12 +16,29 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
 import { useSelector } from '../../store';
 import { NavigationItem } from '../../models/navigation.types';
 
 const drawerWidth = 240;
+
+const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })<{
+  open?: boolean;
+}>(({ theme, open }) => ({
+  flexGrow: 1,
+  padding: theme.spacing(3),
+  transition: theme.transitions.create('margin', {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.leavingScreen,
+  }),
+  marginLeft: `-${drawerWidth}px`,
+  ...(open && {
+    transition: theme.transitions.create('margin', {
+      easing: theme.transitions.easing.easeOut,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+    marginLeft: 0,
+  }),
+}));
 
 const openedMixin = (theme: Theme): CSSObject => ({
   width: drawerWidth,
@@ -92,7 +109,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
   }),
 );
 
-export default function MiniDrawer() {
+export default function MiniDrawer({ children }: React.PropsWithChildren) {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
 
@@ -160,6 +177,11 @@ export default function MiniDrawer() {
           ))}
         </List>
       </Drawer>
+      <Main open={open}>
+        <DrawerHeader />
+        Hello
+        {/* {children} */}
+      </Main>
     </Box>
   );
 }

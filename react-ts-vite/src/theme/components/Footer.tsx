@@ -6,7 +6,7 @@ function Footer() {
   const [value, setValue] = React.useState(0);
 
   return (
-    <Box sx={{ width: "100%" }} style={{ display: "flex", alignItems\: "center", position: 'fixed', bottom: 0, }}
+    <Box sx={{ width: "100%" }} style={{ display: "flex", alignItems: "center", position: 'fixed', bottom: 0, }}
     >
       <BottomNavigation
         showLabels

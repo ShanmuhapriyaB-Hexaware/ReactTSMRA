@@ -25,14 +25,15 @@ function Layout() {
             <ThemeProvider theme={theme}>
                 <CssBaseline />
                 <BasicMenu />
-                <SideNavBar />
+                <SideNavBar>
                 <section id="layout__container">
                     <Suspense fallback={<Fallback />}>
                         {/* <SimpleCard title={''} subtitle={''} /> */}
                         <Outlet />
                     </Suspense>
                 </section>
-                <Footer />
+                {/* <Footer /> */}
+                </SideNavBar>
             </ThemeProvider>
         </Wrapper>);
 }
