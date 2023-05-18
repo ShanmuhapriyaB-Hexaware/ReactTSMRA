@@ -8,8 +8,7 @@ import {
 } from '@ant-design/icons';
 import { Layout, Menu, Button, theme } from 'antd';
 import { Outlet } from 'react-router-dom';
-import { getHomeNavigation } from '../../../configs/navigation/navigation.config';
-import { useSelector } from '../../../store';
+import { useSelector } from '../../store';
 
 const { Header, Sider, Content } = Layout;
 
@@ -19,7 +18,7 @@ const WebLayout: React.FC = () => {
         token: { colorBgContainer },
     } = theme.useToken();
 
-    const navItems = useSelector(state => state.themeSlice.theme.navItems)
+    const navItems = useSelector(state => state.commonSlice.navigation.navItems)
 
     return (
         <Layout>

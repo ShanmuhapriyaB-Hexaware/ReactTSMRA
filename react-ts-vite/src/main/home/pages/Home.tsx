@@ -4,16 +4,16 @@ import reactLogo from "../../../assets/react.svg"
 import { axiosHttpRequest } from '../../../libs/axios';
 import { Button } from 'antd';
 import { useDispatch } from '../../../store';
-import { setNavigation } from '../../../theme/layout/store/slices/theme.slice';
+import { setNavigation } from "../../../common/store/slices/navigation.slice";
 import { getHomeNavigation } from '../../../configs/navigation/navigation.config';
 import { Typography } from 'antd';
 
 const { Title } = Typography;
 
 function Home() {
-    const dispatch = useDispatch();
-
     const [count, setCount] = useState(0);
+
+    const dispatch = useDispatch();
 
     const axios = new axiosHttpRequest();
     axios.axiosHttpRequest
