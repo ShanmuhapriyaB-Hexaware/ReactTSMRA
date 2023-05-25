@@ -1,19 +1,38 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 import { configurationAuth0, configurationAzure, configurationGoogle, configurationIdentityServer, configurationOkta } from './Configurations';
-import { OidcProvider, useOidc, useOidcAccessToken, useOidcIdToken } from '@axa-fr/react-oidc';
+import { OidcProvider, useOidc, useOidcAccessToken, useOidcIdToken, useOidcUser } from '@axa-fr/react-oidc';
 import AuthenticatingError from './override/AuthenticateError';
 import Authenticating from './override/Authenticating';
 import Loading from './override/Loading';
 import ServiceWorkerNotSupported from './override/ServiceWorkerNotSupported';
 import SessionLost from './override/SessionLost';
 import { useDispatch } from '../../store';
-import { setConfigName } from './store/auth.slice';
+// import { setUser } from './store/auth.slice';
 import { CallBackSuccess } from './override/Callback';
 
 const MultiAuth = ({ configurationName, handleConfigurationChange, fname }: any) => {
 
+    const navigate = useNavigate();
     const { login, logout, isAuthenticated } = useOidc(configurationName);
+
+    const { idToken } = useOidcIdToken(configurationName);
+    // const { oidcUser } = useOidcUser(configurationName);
+
+    useEffect(() => {
+        if (isAuthenticated) {
+            if (idToken) {
+                sessionStorage.accessToken = idToken;
+            }
+            sessionStorage.user = fname;
+        }
+    }, [isAuthenticated])
+
+    useEffect(() => {
+        if (isAuthenticated) {
+            navigate("/")
+        }
+    }, [isAuthenticated])
 
     return (
         <>

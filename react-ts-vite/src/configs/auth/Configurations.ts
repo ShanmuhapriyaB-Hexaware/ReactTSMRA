@@ -51,7 +51,7 @@ export const configurationOkta = {
 
   export const configurationAzure = {
     client_id: 'd902d2fe-31d9-4ec6-a686-35714707cb7a',
-    redirect_uri: 'http://localhost:3000/',
+    redirect_uri: 'http://localhost:3000/login/callback',
     scope: 'openid profile email offline_access',
     authority: 'https://login.microsoftonline.com/7c0c36f5-af83-4c24-8844-9962e0163719/',
     authority_configuration: {

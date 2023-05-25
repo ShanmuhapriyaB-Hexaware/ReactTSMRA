@@ -6,7 +6,7 @@ type InitialStateType = {
 };
 
 const initialState: InitialStateType = {
-  user: {},
+  user: '',
   configname: undefined
 };
 
@@ -15,7 +15,7 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     setAuth: (state, action: PayloadAction<any>) => {
-      state.user = action.payload.user;
+      state.user = action.payload;
     },
     setConfigName: (state, action: PayloadAction<any>) => {
         state.configname = action.payload;

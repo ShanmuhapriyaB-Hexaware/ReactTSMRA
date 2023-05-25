@@ -15,7 +15,7 @@ const routes = () => {
         { path: '/403', element: <UnAuthorized /> },
         { path: '/404', element: <NotFound /> },
         { path: '*', element: <Navigate to="/404" /> },
-        { path: '/login', element: <MultiAuthProvider /> },
+        { path: '/login/*', element: <MultiAuthProvider /> },
     ]
     return all_routes
 }
