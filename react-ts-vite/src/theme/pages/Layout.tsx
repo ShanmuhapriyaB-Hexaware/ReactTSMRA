@@ -30,6 +30,7 @@ const WebLayout: React.FC = () => {
         else {
             localStorage.clear();
             sessionStorage.clear()
+            sessionStorage.configurationName = 'config_classic'
             navigate('/login')
         }
     };

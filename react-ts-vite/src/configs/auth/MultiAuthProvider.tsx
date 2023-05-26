@@ -8,7 +8,6 @@ import Loading from './override/Loading';
 import ServiceWorkerNotSupported from './override/ServiceWorkerNotSupported';
 import SessionLost from './override/SessionLost';
 import { useDispatch } from '../../store';
-// import { setUser } from './store/auth.slice';
 import { CallBackSuccess } from './override/Callback';
 
 const MultiAuth = ({ configurationName, handleConfigurationChange, fname }: any) => {
@@ -17,7 +16,6 @@ const MultiAuth = ({ configurationName, handleConfigurationChange, fname }: any)
     const { login, logout, isAuthenticated } = useOidc(configurationName);
 
     const { idToken } = useOidcIdToken(configurationName);
-    // const { oidcUser } = useOidcUser(configurationName);
 
     useEffect(() => {
         if (isAuthenticated) {
